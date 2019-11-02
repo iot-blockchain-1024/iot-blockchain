@@ -1,0 +1,113 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Monitor - Iot Platform</title>
+    <link rel="stylesheet" type="text/css" href="asset/css/calendar.css">
+    <link rel="stylesheet" type="text/css" href="asset/css/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/css/semantic.min.css">
+    <script src="asset/js/jquery-2.1.4.min.js"></script>
+    <script src="asset/js/moment.min.js"></script>
+    <script src="asset/js/semantic.min.js"></script>
+    <script src="asset/js/echarts.min.js"></script>
+    <script src="asset/js/es6.js"></script>
+    <script src="asset/js/chart.js"></script>
+    <script src="asset/js/home.js"></script>
+
+</head>
+<body class="pushable">
+
+<!-- Following Menu -->
+<div class="ui large top fixed menu transition hidden">
+  <div class="ui container">
+        <a class="item" href="index.html">Home</a>
+        <a class="active item" href="iot.html">Monitor</a>
+        <a class="item" href="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372">Transactions</a>
+
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu left">
+        <a class="item" href="index.html">Home</a>
+        <a class="active item" href="iot.html">Monitor</a>
+        <a class="item" href="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372">Transactions</a>
+
+</div>
+
+
+<!-- Page Contents -->
+<div class="pusher">
+  <div class="ui inverted vertical center aligned segment pusher-header">
+
+    <div class="ui container">
+      <div class="ui large secondary inverted pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <a class="item" href="index.html">Home</a>
+        <a class="active item" href="iot.html">Monitor</a>
+        <a class="item" href="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372">Transactions</a>
+          <div class="right item">
+				<div class="ui action left icon input">
+					<i class="calendar icon"></i>
+					<input type="text" placeholder="Change the date" id="singleDateRange">
+					<div class="ui blue button" id="show-button">
+						Show
+					</div>
+				</div>
+		</div>
+      </div>
+    </div>
+  </div>
+
+<div class="ui vertical segment container">
+   <div id="tmpchart" style="width:auto;height:500px;">
+
+   </div>
+    <div id="hmtchart" style="width:auto;height:500px;">
+
+    </div>
+    <div id="co2chart" style="width:auto;height:500px;">
+
+    </div>
+    <div id="lightchart" style="width:auto;height:500px;">
+
+    </div>
+</div>
+
+
+
+  <div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="three wide column">
+          <h4 class="ui inverted header">About</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Sitemap</a>
+            <a href="#" class="item">Contact Us</a>
+            <a href="#" class="item">Religious Ceremonies</a>
+            <a href="#" class="item">Gazebo Plans</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Services</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Banana Pre-Order</a>
+            <a href="#" class="item">DNA FAQ</a>
+            <a href="#" class="item">How To Access</a>
+            <a href="#" class="item">Favorite X-Men</a>
+          </div>
+        </div>
+        <div class="seven wide column">
+          <h4 class="ui inverted header">Footer Header</h4>
+          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
