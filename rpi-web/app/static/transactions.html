@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Monitor - Iot Platform</title>
+    <link rel="stylesheet" type="text/css" href="asset/css/calendar.css">
+    <link rel="stylesheet" type="text/css" href="asset/css/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/css/semantic.min.css">
+    <script src="asset/js/jquery-2.1.4.min.js"></script>
+    <script src="asset/js/moment.min.js"></script>
+    <script src="asset/js/semantic.min.js"></script>
+    <script src="asset/js/echarts.min.js"></script>
+    <script src="asset/js/es6.js"></script>
+    <script src="asset/js/chart.js"></script>
+    <script src="asset/js/home.js"></script>
+
+</head>
+<body class="pushable">
+
+<!-- Following Menu -->
+<div class="ui large top fixed menu transition hidden">
+  <div class="ui container">
+        <a class="item" href="index.html">Home</a>
+        <a class="active item" href="iot.html">Monitor</a>
+        <a class="item" href="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372">Transactions</a>
+
+    </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu left">
+        <a class="item" href="index.html">Home</a>
+        <a class="active item" href="iot.html">Monitor</a>
+        <a class="item" href="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372">Transactions</a>
+
+</div>
+<iframe src="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372" id="myiframe" scrolling="no" οnlοad="changeFrameHeight()" frameborder="0"></iframe>
+<script>
+    function changeFrameHeight(){
+    var ifm= document.getElementById("iframepage");
+    ifm.height=document.documentElement.clientHeight;
+
+}
+
+window.οnresize=function(){
+     changeFrameHeight();
+
+}
+</script>
+</body>
+</html>

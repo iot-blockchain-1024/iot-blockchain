@@ -4,13 +4,16 @@ $(document).ready(function () {
     charts.myTmpChart = echarts.init(document.getElementById('tmpchart'));
     charts.myHmtChart = echarts.init(document.getElementById('hmtchart'));
     charts.myCo2Chart = echarts.init(document.getElementById('co2chart'));
-    initCharts(charts);
+    loadCharts(charts, 1);
     $('#singleDateRange').DatePicker({
         startDate: moment()
     });
+
     $('#show-button').click(function () {
+        $("#iot2").removeClass('teal');
+        $("#iot1").addClass('teal');
         var selectdate = $('#singleDateRange').val().split('-').join('');
-        getIoTData(selectdate, 1, function (data) {
+        getIoTData(selectdate, 1, 1, function (data) {
         createTMPChart(charts,data);
         createHMTChart(charts,data);
         createCo2Chart(charts,data);
@@ -18,12 +21,38 @@ $(document).ready(function () {
         });
     });
 
+    $('#iot1').click(function () {
+        $("#iot2").removeClass("teal");
+        $("#iot1").addClass("teal");
+        var selectdate = $('#singleDateRange').val().split('-').join('');
+        getIoTData(selectdate, 1, 1, function (data) {
+            createTMPChart(charts,data);
+            createHMTChart(charts,data);
+            createCo2Chart(charts,data);
+            createLightChart(charts,data);
+        });
+
+    });
+
+     $('#iot2').click(function () {
+        $("#iot1").removeClass('teal');
+        $("#iot2").addClass('teal');
+        var selectdate = $('#singleDateRange').val().split('-').join('');
+        getIoTData(selectdate, 1, 2, function (data) {
+            createTMPChart(charts,data);
+            createHMTChart(charts,data);
+            createCo2Chart(charts,data);
+            createLightChart(charts,data);
+        });
+
+    });
+
 
 });
 
-function initCharts(charts){
+function loadCharts(charts, device){
     var todaytime = showLocale(new Date());
-    getIoTData(todaytime, 1, function (data) {
+    getIoTData(todaytime, 1, device, function (data) {
         createTMPChart(charts,data);
         createHMTChart(charts,data);
         createCo2Chart(charts,data);
@@ -31,7 +60,7 @@ function initCharts(charts){
     });
 }
 
-function getIoTData(todaytime, offset, callback) {
+function getIoTData(todaytime, offset, device, callback) {
     var data = {};
     data.timedata = [];
     data.tmpdata = [];
@@ -39,8 +68,8 @@ function getIoTData(todaytime, offset, callback) {
     data.hmtdata = [];
     data.co2data = [];
     data.lxdata = [];
-    $.getJSON('/api/v1/date/' + todaytime,
-        function (rawData) {
+    $.getJSON('/api/v1/device/' +device + '/date/' + todaytime,
+        function (rawData, status, xhr) {
             $.each(rawData,
                 function (i, item) {
                     if (i % offset == 0) {
@@ -52,6 +81,8 @@ function getIoTData(todaytime, offset, callback) {
                     }
                 });
             callback(data);
+        }).fail(function() {
+            $('.modal').modal('show');
         });
 }
 
@@ -329,6 +360,22 @@ function createLightChart(charts,data) {
             name: 'Light Strength',
             type: 'line',
             data: data.lxdata,
+            itemStyle: {
+                normal: {
+                    color: '#00b5ad'
+                }
+            },
+             areaStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: '#00b5ad'
+                    }, {
+                        offset: 1,
+                        color: '#ffe'
+                    }])
+                }
+            },
             markPoint: {
                 data: [{
                     type: 'max',

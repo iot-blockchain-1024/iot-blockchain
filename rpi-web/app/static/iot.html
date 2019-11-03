@@ -26,7 +26,6 @@
         <a class="item" href="https://tbtc.bitaps.com/myfM3Pph3NjNeihjEXFPvGdhpfiQKYv372">Transactions</a>
 
     </div>
-  </div>
 </div>
 
 <!-- Sidebar Menu -->
@@ -63,19 +62,27 @@
     </div>
   </div>
 
+
+
+
 <div class="ui vertical segment container">
-   <div id="tmpchart" style="width:auto;height:500px;">
 
-   </div>
-    <div id="hmtchart" style="width:auto;height:500px;">
-
+    <div class="ui buttons iot-buttons">
+      <button id="iot1" class="ui teal button">IoT 1</button>
+      <button id="iot2" class="ui button">IoT 2</button>
     </div>
-    <div id="co2chart" style="width:auto;height:500px;">
-
+    <div id="all-charts">
+        <div id="tmpchart" class="chart" style="width:auto;height:500px; margin-top: 50px;">
+        </div>
+        <div id="hmtchart" class="chart" style="width:auto;height:500px;">
+        </div>
+        <div id="co2chart" class="chart" style="width:auto;height:500px;">
+        </div>
+        <div id="lightchart" class="chart" style="width:auto;height:500px;">
+        </div>
     </div>
-    <div id="lightchart" style="width:auto;height:500px;">
 
-    </div>
+
 </div>
 
 
@@ -107,6 +114,15 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div class="ui modal">
+  <div class="header">Message</div>
+  <div class="content">
+    <p>This IoT Data is empty.</p>
+  </div>
+  <div class="actions">
+    <div class="ui cancel blue button">Dismiss</div>
   </div>
 </div>
 </body>

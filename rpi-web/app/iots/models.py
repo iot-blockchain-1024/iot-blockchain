@@ -17,8 +17,9 @@ class IoTs(db.Model):
     date = db.Column(db.String(20), nullable=False)
     time = db.Column(db.String(20), nullable=False)
     timestamp = db.Column(db.String(20), nullable=False)
+    device = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, hmt=None, tmp=None, ppm=None, lx=None, ld=None, date=None, time=None, timestamp=None):
+    def __init__(self, hmt=None, tmp=None, ppm=None, lx=None, ld=None, date=None, time=None, timestamp=None, device=None):
         self.hmt = hmt
         self.tmp = tmp
         self.ppm = ppm
@@ -27,6 +28,7 @@ class IoTs(db.Model):
         self.date = date
         self.time = time
         self.timestamp = timestamp
+        self.device = device
 
     def to_dict(self):
         return {c.key: getattr(self, c.key)

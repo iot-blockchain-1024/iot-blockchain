@@ -12,6 +12,7 @@ class IoTSchema(Schema):
     time = fields.String(required=True)
     date = fields.String(required=True)
     timestamp = fields.String(required=True)
+    device  = fields.String(required=False)
 
     @post_dump
     def make_object(self, data):

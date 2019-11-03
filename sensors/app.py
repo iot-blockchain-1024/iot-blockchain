@@ -6,11 +6,18 @@ import RPi.GPIO as GPIO
 import requests
 from bit import PrivateKeyTestnet
 import numpy as np
+import smbus
+
 from config import IS_POST_TO_SERVER, IS_BROADCAST_TO_BLOCKCHAIN, BITCOIN_IOT_RECEIVER, IS_SAVE_TO_LOCAL, \
-    LOCAL_FOLDER_DIR, POST_INTERVAL_TIME, BROADCAST_INTERVAL, BITCOIN_IOT_SENDER_KEY, BITCOIN_TRANSFER_AMOUNT, API_URL
+    LOCAL_FOLDER_DIR, POST_INTERVAL_TIME, BROADCAST_INTERVAL, BITCOIN_IOT_SENDER_KEY, BITCOIN_TRANSFER_AMOUNT, API_URL, \
+    DEVICE_ID, __DEV_ADDR, __CMD_PWR_ON, __CMD_RESET, __CMD_SEN100H, __CMD_PWR_OFF, __CMD_SEN100L, __CMD_THRES2
 
 current_counts = 1
 current_sets = []
+last_transaction = ''
+key = PrivateKeyTestnet(BITCOIN_IOT_SENDER_KEY)
+retries = 0
+bus = smbus.SMBus(1)
 
 
 def post_to_server(data):
@@ -31,10 +38,9 @@ def post_to_server(data):
 def broadcast_to_blockchain(info):
     if not IS_BROADCAST_TO_BLOCKCHAIN:
         return "NOT BROADCAST TO BLOCKCHAIN"
-    key = PrivateKeyTestnet(BITCOIN_IOT_SENDER_KEY)
     output = [(BITCOIN_IOT_RECEIVER, BITCOIN_TRANSFER_AMOUNT, "btc")]
-    key.send(output, message=info)
-    return "BITCOIN TESTNET SUCCESS: " + info
+    hex_str = key.send(output, message=info)
+    return "BITCOIN TESTNET SUCCESS: " + hex_str
 
 
 def save_to_local_folder(date, data):
@@ -61,6 +67,11 @@ def save_to_local_folder(date, data):
 def init_GPIO():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(21, GPIO.IN)
+    bus.write_byte(__DEV_ADDR, __CMD_PWR_ON)
+    bus.write_byte(__DEV_ADDR, __CMD_RESET)
+    bus.write_byte(__DEV_ADDR, __CMD_SEN100H)
+    bus.write_byte(__DEV_ADDR, __CMD_SEN100L)
+    bus.write_byte(__DEV_ADDR, __CMD_PWR_OFF)
 
 
 def compute_average():
@@ -92,6 +103,14 @@ def start_monitoring():
     co2 = mh_z19.read()
     # timestamp
     current_milli_time = str(int(round(time.time() * 1000)))
+    # lx senors
+    bus.write_byte(__DEV_ADDR, __CMD_PWR_ON)
+    bus.write_byte(__DEV_ADDR, __CMD_THRES2)
+    time.sleep(0.2)
+    res = bus.read_word_data(__DEV_ADDR, 0)
+    res = ((res >> 8) & 0xff) | (res << 8) & 0xff00
+    lx = round(res / (2 * 1.2), 2)
+
     # if every hardware is working
     if humidity is not None and temperature is not None and co2 != "9":
         data = {}
@@ -100,8 +119,8 @@ def start_monitoring():
         data['tmp'] = format(temperature, ".1f")
         data['hmt'] = format(humidity, ".1f")
         data['ppm'] = str(co2['co2'])
-        data['lx'] = str(GPIO.input(21))
-        data['ld'] = '0'
+        data['lx'] = str(lx)
+        data['ld'] = str(GPIO.input(21))
         data['timestamp'] = current_milli_time
         # push to the sets
         current_sets.append(data)
@@ -113,7 +132,8 @@ def start_monitoring():
             "lx": data['lx'],
             "ld": data['ld'],
             "date": data['date'],
-            "timestamp": data['timestamp']
+            "timestamp": data['timestamp'],
+            "device": str(DEVICE_ID),
         }
         print(messages)
         # save to local folder
@@ -129,17 +149,26 @@ def start_monitoring():
 
 if __name__ == '__main__':
     init_GPIO()
+    last_transaction = key.get_transactions()[0]
     while True:
         start_monitoring()
+        print("CURRENT OID", current_counts)
         current_counts = current_counts + 1
         if current_counts > BROADCAST_INTERVAL:
             req = compute_average()
             current_sets = []
             current_counts = 0
-            messages = req['hmt'] + "|" + req['tmp'] + '|' + req['ppm'] + '|' + req['lx'] + '|' + req['timestamp']
+            messages = req['hmt'] + "|" + req['tmp'] + '|' + req['ppm'] + '|' + req['lx'] + '|' + req['timestamp'] + '|' + str(DEVICE_ID)
             # broadcast to blockchain
             try:
                 print(broadcast_to_blockchain(messages))
+                tmp = key.get_transactions()[0]
+                if tmp is last_transaction:
+                    print("waiting 1 min, retry")
+                    time.sleep(1)
+                    print(broadcast_to_blockchain(messages))
+                else:
+                    last_transaction = tmp
             except:
                 pass
 
