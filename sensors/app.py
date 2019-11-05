@@ -127,7 +127,7 @@ def start_monitoring():
         messages = {
             "time": data['time'],
             "tmp": data['tmp'],
-            "hmt": data['tmp'],
+            "hmt": data['hmt'],
             "ppm": data['ppm'],
             "lx": data['lx'],
             "ld": data['ld'],

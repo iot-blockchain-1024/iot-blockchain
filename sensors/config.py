@@ -1,5 +1,5 @@
 DEVICE_ID = 1
-API_URL = 'http://iotplatform.yfgeek.com/api/v1/iot'
+API_URL = 'http://104.128.82.179/api/v1/iot'
 BROADCAST_INTERVAL = 14
 POST_INTERVAL_TIME = 60
 BITCOIN_IOT_SENDER_KEY = 'cNyYBxvt1BvAq3svjTZWg4LN828bzPimax2C7pipPjbUzgWYDXdp'
